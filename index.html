@@ -36,6 +36,9 @@
             color: #00796b;
             margin: 5px 0;
         }
+        .stats .bold {
+            font-weight: bold;
+        }
         .buttons {
             display: flex;
             justify-content: center;
@@ -51,6 +54,10 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s, transform 0.3s;
+        }
+        .buttons .small-button {
+            padding: 5px 10px;
+            font-size: 14px;
         }
         .buttons button:hover {
             background-color: #0056b3;
@@ -80,8 +87,9 @@
     <div class="scoreboard">
         <h1>Cricket Scoreboard</h1>
         <div class="stats">
-            <span>Total Score: <span id="total-score">0</span></span>
-            <span>Overs: <span id="overs">0.0</span></span>
+            <span class="bold">Total Score: <span id="total-score">0</span></span>
+            <span class="bold">Overs: <span id="overs">0.0</span></span>
+            <span>CRR: <span id="crr">0.00</span></span>
         </div>
         <div class="buttons">
             <button onclick="addRuns(0)">0</button>
@@ -91,11 +99,11 @@
             <button onclick="addRuns(4)">4</button>
             <button onclick="addRuns(6)">6</button>
             <button onclick="addWide()">Wide</button>
-            <button onclick="addNoBall(1)">No Ball + 1</button>
-            <button onclick="addNoBall(2)">No Ball + 2</button>
-            <button onclick="addNoBall(3)">No Ball + 3</button>
-            <button onclick="addNoBall(4)">No Ball + 4</button>
-            <button onclick="addNoBall(6)">No Ball + 6</button>
+            <button class="small-button" onclick="addNoBall(1)">No Ball + 1</button>
+            <button class="small-button" onclick="addNoBall(2)">No Ball + 2</button>
+            <button class="small-button" onclick="addNoBall(3)">No Ball + 3</button>
+            <button class="small-button" onclick="addNoBall(4)">No Ball + 4</button>
+            <button class="small-button" onclick="addNoBall(6)">No Ball + 6</button>
             <button onclick="addWicket()">Wicket</button>
             <button onclick="undo()">Undo</button>
         </div>
@@ -115,9 +123,15 @@
         function updateScoreboard() {
             document.getElementById('total-score').innerText = totalScore;
             document.getElementById('overs').innerText = (Math.floor(fairDeliveries / 6)) + "." + (fairDeliveries % 6);
+            document.getElementById('crr').innerText = calculateCRR().toFixed(2);
             
             let summaryText = overSummary.map(ball => ball).join(" ");
             document.getElementById('over-summary').innerText = summaryText;
+        }
+
+        function calculateCRR() {
+            if (fairDeliveries === 0) return 0;
+            return (totalScore / fairDeliveries) * 6;
         }
 
         function addRuns(runs) {
